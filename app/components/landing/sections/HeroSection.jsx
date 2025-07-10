@@ -33,7 +33,7 @@ export default function HeroSection() {
           <h1 className="text-h1-mobile md:text-h1 font-manrope text-brand-primary w-full max-w-[1324px]">
             <span className="text-brand-text">Helping Everyone</span>
             <br />
-            <span className="bg-gradient-to-r from-gradient-from to-gradient-to bg-clip-text text-transparent block">Find Their Voices</span>
+            <span className="bg-gradient-to-r from-gradient-from to-gradient-to bg-clip-text text-transparent block">Find Their Voice</span>
           </h1>
           <p className="text-p md:text-lead text-brand-text-secondary max-w-[748px]">
             A free tool to make AAC modelling faster and easier
