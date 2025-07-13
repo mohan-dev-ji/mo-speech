@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useAppState } from './AppStateContext';
 
 export default function PecsGrid() {
   const [symbols, setSymbols] = useState([]);
+  const { addSymbol } = useAppState();
 
   useEffect(() => {
     fetch('/api/symbols/default')
@@ -13,7 +15,12 @@ export default function PecsGrid() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
       {symbols.map(symbol => (
-        <div key={symbol._id} className="relative w-full aspect-square" style={{ textAlign: 'center' }}>
+        <div
+          key={symbol._id}
+          className="relative w-full aspect-square"
+          style={{ textAlign: 'center' }}
+          onClick={() => addSymbol(symbol)}
+        >
           <Image
             src={`/api/symbols/image?filename=${encodeURIComponent(symbol.imagePath)}`}
             alt={symbol.words.eng}

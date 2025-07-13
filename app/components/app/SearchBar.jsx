@@ -1,94 +1,69 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useAppState } from './AppStateContext';
+import { Search, X } from 'lucide-react';
 
-
-
-function SearchBar({ setSearchQuery, searchQuery, handleAddToTopLine, pecs }) {
+function SearchBar() {
+  const { addSymbol, userLang } = useAppState();
+  const [searchQuery, setSearchQuery] = useState('');
   const [isListening, setIsListening] = useState(false);
+  const [results, setResults] = useState([]);
 
-  // Handle Speech Recognition
-  const handleSpeechRecognition = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert("Your browser doesn't support speech recognition. Try Chrome.");
-      return;
-    }
-
-    alert('Press ok to start recording')
-
-    const recognition = new webkitSpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript.trim();
-      console.log('Recognized sentence:', transcript); 
-
-      // Split transcript into individual words
-      const words = transcript.toLowerCase().split(' ');
-      console.log('Recognized words:', words); // Log the words
-
-
-      // Filter PECs that match any of the words
-      const matchedPecs = words
-        .map(word => `${word}.svg`)
-        .filter(pec => pecs.includes(pec));
-      console.log('Matched PECs:', matchedPecs);
-      console.log('PECs list:', pecs);
-
-       // Add all matched PECs to Top Line in one go
-       if (matchedPecs.length > 0) {
-        handleAddToTopLine(matchedPecs);  // Pass the array of matched PECs
-      }
-
-      setSearchQuery(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error', event);
-      setIsListening(false);
-    };
-
-    recognition.start();
+  // Placeholder: implement actual search logic as needed
+  const handleSearch = async (e) => {
+    setSearchQuery(e.target.value);
+    // Optionally, fetch search results from API or filter locally
+    // setResults(...)
   };
+
+  // Placeholder: implement speech recognition logic
+  const handleSpeechRecognition = () => {
+    alert('Speech recognition not implemented yet.');
+  };
+
+  // Example: handle selecting a result
+  const handleSelect = (symbol) => {
+    addSymbol(symbol);
+    setSearchQuery('');
+    setResults([]);
+  };
+
   return (
-      <div className="mb-4">
-        <div className='flex items-center'>
-      
+    <div className="relative flex items-center w-full">
+      {/* Search icon on the left */}
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <Search className="w-5 h-5" />
+      </span>
       <input
         type="text"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={handleSearch}
         placeholder="Search symbols..."
-        className="w-full p-2 border border-gray-300 rounded-full shadow-sm pr-10 pl-5"
+        className="w-full text-p text-brand-background p-2 border border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-400 rounded-full shadow-sm pr-10 pl-10 outline-none"
+        style={{ boxSizing: 'border-box' }}
       />
+      {/* X icon on the right when typing */}
       {searchQuery && (
         <button
-        onClick={() => setSearchQuery("")}
-        className="absolute right-20 text-gray-500 pr-10"
+          onClick={handleClear}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          tabIndex={-1}
         >
-          X {/* Unicode character for "X" */}
+          <X className="w-5 h-5" />
         </button>
       )}
-     
-      {/* Microphone Icon */}
-      <div className="mt-2 flex items-center pl-10">
-        <button
-          onClick={handleSpeechRecognition}
-          className="text-gray-500 hover:text-gray-700"
-          disabled={isListening}
-        >
-          <Image src="/icons/microphone.svg" alt="Microphone" width={32} height={32} />
-        </button>
-
-      </div>
-      </div>
-      
+      {/* Microphone icon (optional, can be moved if needed) */}
+      {/*
+      <button
+        onClick={handleSpeechRecognition}
+        className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+        disabled={isListening}
+      >
+        <Image src="/icons/microphone.svg" alt="Microphone" width={24} height={24} />
+      </button>
+      */}
     </div>
-  )
-};
+  );
+}
 
 export default SearchBar;
