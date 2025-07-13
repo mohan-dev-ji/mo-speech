@@ -26,8 +26,8 @@ function TopLine() {
   };
 
   return (
-    <div className="bg-white flex flex-col px-4 py-4 rounded-md min-h-[120px]" style={{ minHeight: '120px' }}>
-      <div className="flex flex-wrap gap-4 w-full">
+    <div className="bg-white flex flex-col px-4 py-4 rounded-md min-h-[120px] justify-center" style={{ minHeight: '140px' }}>
+      <div className="flex flex-wrap gap-4 w-full items-center h-full">
         {selectedSymbols.map((symbol, index) => (
           <div key={index} className="relative inline-block">
             <Image
